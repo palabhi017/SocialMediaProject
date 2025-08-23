@@ -4,8 +4,71 @@ import {
   PaperAirplaneIcon,
   ShareIcon,
 } from "@heroicons/react/24/outline";
+import CommentSection from "../CommentSection/CommentSection"
+import { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  commentLoading
+} from "../../Store/Comment/commentSlice"
+import axios from "axios";
+
+interface CommentPostValue {
+  comment: String
+  userId: String
+  postId: String
+}
 
 const PostCard = () => {
+  const [showCommentSection, setshowCommentSection] = useState(false)
+  const [allComment, setAllComment] = useState([])
+
+
+  const formik = useFormik({
+    initialValues:
+    {
+      comment: "",
+      userId: "6890c32c2e55fd668c72b33f",
+      postId: "68a34b41afdbe290716f48e2"
+    },
+    onSubmit: (values, { resetForm }) => {
+      postComment(values)
+      resetForm();
+    }
+  })
+
+  const postComment = async (values: CommentPostValue) => {
+    try {
+      let res = await axios.post(
+        "http://localhost:5000/api/comment/postComment",
+        {
+          ...values
+        }
+      )
+      console.log(res, "resresres")
+    } catch (err) {
+      console.log(err, "PPPPpppppp")
+    }
+  }
+
+  useEffect(() => {
+    getAllComments()
+  }, [showCommentSection])
+
+  const getAllComments = async () => {
+    if (showCommentSection) {
+      await axios.get(
+        "http://localhost:5000/api/comment/getComment")
+        .then((res) => {
+          console.log(res, "Ppppppppppppp")
+          setAllComment(res.data)
+        }).catch((err) => {
+          console.log(err)
+        })
+    }
+  }
+
+
   return (
     <div className="p-5 w-fit m-5 rounded-xl shadow-md bg-[#fff]">
       <div className="flex gap-3">
@@ -40,7 +103,11 @@ const PostCard = () => {
           <HeartIcon className="size-4" />
           Like
         </div>
-        <div className="flex items-center gap-1 text-sm">
+        <div className="flex items-center gap-1 text-sm cursor-pointer"
+          onClick={() => {
+            setshowCommentSection(!showCommentSection)
+          }}
+        >
           <ChatBubbleBottomCenterIcon className="size-4" />
           Comment
         </div>
@@ -49,6 +116,15 @@ const PostCard = () => {
           Share
         </div>
       </div>
+      {
+        showCommentSection ? (
+          <div className="h-50 max-h-50 overflow-y-auto ">
+            {allComment.map((comment, index) => (
+              <CommentSection key={index} comment={comment} />
+            ))}
+          </div>
+        ) : null
+      }
       <div className="flex items-center justify-between p-2 border-b gap-5 border-gray-200">
         <img
           className="w-7 h-7 rounded-full"
@@ -56,11 +132,17 @@ const PostCard = () => {
           alt=""
         />
         <input
+          name="comment"
           type="text"
           className="h-7 flex-1 bg-gray-100 rounded-sm text-sm p-2"
           placeholder="Write a comment..."
+          onChange={formik.handleChange}
+          value={formik.values.comment}
+
         />
-        <PaperAirplaneIcon className="size-5" />
+        <PaperAirplaneIcon className="size-5"
+          onClick={() => formik.handleSubmit()}
+        />
       </div>
     </div>
   );
