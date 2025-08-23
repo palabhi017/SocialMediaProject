@@ -1,4 +1,5 @@
-import axios from "axios";
+// @ts-ignore
+import apiClient from "../../api/client";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -46,12 +47,9 @@ const Signup = () => {
   let handleSignup = async (values: Value) => {
     dispatch(loginLoading());
     try {
-      let res = await axios.post<SignupResponse>(
-        "http://localhost:3000/auth/signup",
-        {
-          ...values,
-        }
-      );
+      let res = await apiClient.post<SignupResponse>("/auth/signup", {
+        ...values,
+      });
       dispatch(loginSuccess({ ...res.data }));
       navigate("/");
     } catch (error) {

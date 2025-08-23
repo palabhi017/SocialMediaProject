@@ -5,9 +5,9 @@ import {
   ShareIcon,
 } from "@heroicons/react/24/outline";
 
-const PostCard = () => {
+const PostCard = ({ Location, Image, User }: any) => {
   return (
-    <div className="p-5 w-fit m-5 rounded-xl shadow-md bg-[#fff]">
+    <div className="p-5 w-fit m-5 rounded-md shadow-2xs bg-[#fff]">
       <div className="flex gap-3">
         <img
           className="w-12 h-12 rounded-full"
@@ -15,15 +15,11 @@ const PostCard = () => {
           alt=""
         />
         <div className="flex flex-col">
-          <span className="text-base">Abhishek</span>
-          <span className="text-sm text-gray-400">Badnawar, MP</span>
+          <span className="text-base">{User.Name}</span>
+          <span className="text-sm text-gray-400">{Location}</span>
         </div>
       </div>
-      <img
-        className="w-120 rounded mt-3"
-        src="https://1.bp.blogspot.com/-KANgNmAXGGA/X9IHjMTivVI/AAAAAAAAAVA/VW6WFYFSPDM6ehwZarHB8Q5Y14r7_tp9wCLcBGAsYHQ/s1920/20201210_165103.jpg"
-        alt=""
-      />
+      <img className="w-120 rounded mt-3" src={Image} alt="" />
       <div className="flex justify-between p-2 border-b border-gray-200">
         <img
           className="w-6 h-6 rounded-full"

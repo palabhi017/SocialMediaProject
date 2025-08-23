@@ -1,4 +1,5 @@
-import axios from "axios";
+// @ts-ignore
+import apiClient from "../../api/client";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -17,6 +18,7 @@ interface Value {
 interface SignupResponse {
   token: string;
   message: string;
+  userData: any;
 }
 
 const SignupSchema = Yup.object().shape({
@@ -44,12 +46,10 @@ const Login = () => {
   let handleSignup = async (values: Value) => {
     dispatch(loginLoading());
     try {
-      let res = await axios.post<SignupResponse>(
-        "http://localhost:3000/auth/login",
-        {
-          ...values,
-        }
-      );
+      let res = await apiClient.post<SignupResponse>("/auth/login", {
+        ...values,
+      });
+      console.log(res);
       dispatch(loginSuccess({ ...res.data }));
       navigate("/");
     } catch (error) {
