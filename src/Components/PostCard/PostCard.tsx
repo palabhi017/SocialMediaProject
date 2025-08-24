@@ -7,11 +7,7 @@ import {
 import CommentSection from "../CommentSection/CommentSection"
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  commentLoading
-} from "../../Store/Comment/commentSlice"
-import axios from "axios";
+import { useSelector } from "react-redux";
 // @ts-ignore
 import apiClient from "../../api/client.js";
 
@@ -25,13 +21,16 @@ interface CommentPostValue {
 const PostCard = ({ Location, Image, User, _id }: any) => {
   const [showCommentSection, setshowCommentSection] = useState(false)
   const [allComment, setAllComment] = useState<any[]>([])
+  const { user } = useSelector((state: any) => state.AuthReducer);
+
+
 
 
   const formik = useFormik({
     initialValues:
     {
       comment: "",
-      userId: User?._id,
+      userId: user?._id,
       postId: _id
     },
     onSubmit: (values, { resetForm }) => {
@@ -42,6 +41,7 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
 
   const postComment = async (values: CommentPostValue) => {
     try {
+      setshowCommentSection(true)
       let res = await apiClient.post<any>(
         "comment/postComment",
         {
@@ -49,6 +49,7 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
         }
       )
       setAllComment([res.data as any, ...allComment]);
+      console.log(res, "PPPPPPPPPPPP")
 
     } catch (err) {
       console.log({ "Err": err })
@@ -120,7 +121,7 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
       </div>
       {
         showCommentSection ? (
-          <div className="h-50 max-h-50 overflow-y-auto ">
+          <div className="max-h-50 overflow-y-auto ">
             {allComment.map((comment, index) => (
               <CommentSection key={index} comment={comment} />
             ))}
@@ -140,7 +141,11 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
           placeholder="Write a comment..."
           onChange={formik.handleChange}
           value={formik.values.comment}
-
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              formik.handleSubmit(); // Call your sendMessage function
+            }
+          }}
         />
         <PaperAirplaneIcon className="size-5"
           onClick={() => formik.handleSubmit()}

@@ -61,7 +61,7 @@ const Homepage = () => {
             allPostData?.length &&
             allPostData.map((e: any) => <PostCard key={e._id} {...e} />)}
         </div>
-        <ChatsSection />
+        {/* <ChatsSection /> */}
       </div>
     </div>
   );
