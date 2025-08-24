@@ -1,6 +1,12 @@
 import { useSelector } from "react-redux";
 
-const UserProfileImage = ({ size }: { size: number }) => {
+const UserProfileImage = ({
+  size,
+  fontSize,
+}: {
+  size: string | number;
+  fontSize: string;
+}) => {
   const { user } = useSelector((state: any) => state.AuthReducer);
   function getInitials(name: string) {
     if (!name) return "";
@@ -18,12 +24,12 @@ const UserProfileImage = ({ size }: { size: number }) => {
       {user.Image ? (
         <img
           className={`w-${size} h-${size} rounded-full`}
-          src="https://wallpapers.com/images/hd/professional-profile-pictures-1080-x-1080-460wjhrkbwdcp1ig.jpg"
+          src={user?.Image}
           alt=""
         />
       ) : (
         <div
-          className={`w-${size} h-${size} rounded-full text-md bg-blue-200 flex justify-center items-center`}
+          className={`w-${size} h-${size} rounded-full text-${fontSize} bg-blue-200 flex justify-center items-center`}
         >
           {getInitials(user.Name)}
         </div>

@@ -28,15 +28,15 @@ const Homepage = () => {
 
   useEffect(() => {
     if (!socket) return;
-
-    socket.on("new_post", (data: any) => {
+    console.log("aaaaaaaaaaa11");
+    const handleNewPost = (data: any) => {
+      console.log("aaaaaaaaaaa22", data);
       setAllPostData((prev: any) => [data, ...prev]);
-    });
+    };
+    socket.on("new_post", handleNewPost);
 
     return () => {
-      socket.off("new_post", (data: any) => {
-        setAllPostData((prev: any) => [data, ...prev]);
-      });
+      socket.off("new_post", handleNewPost);
     };
   }, []);
 
@@ -49,6 +49,8 @@ const Homepage = () => {
       handleGetAllPost();
     }
   }, [isRefetch]);
+
+  console.log(allPostData, "allPostData");
 
   return (
     <div className="h-screen flex flex-col">

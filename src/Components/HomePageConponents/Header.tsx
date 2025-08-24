@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import ProfileModal from "../ProfileModal/ProfileModal";
 import ModalWrapper from "../ModalWrapper/ModalWrapper";
+import UserProfileImage from "../UserProfileImage/UserProfileImage";
 
 const Header = () => {
   const [profileOpen, setProfileOpen] = useState<boolean>();
@@ -34,11 +35,7 @@ const Header = () => {
           onClick={() => setProfileOpen(!profileOpen)}
         >
           <div className="text-md ">{user?.Name}</div>
-          <img
-            className="w-9 h-9 rounded-full"
-            src="https://wallpapers.com/images/hd/professional-profile-pictures-1080-x-1080-460wjhrkbwdcp1ig.jpg"
-            alt=""
-          />
+          <UserProfileImage size={9} fontSize={"sm"} />
         </div>
         {profileOpen && (
           <div className="fixed top-12 z-50 bg-stone-50 w-60 rounded-b-md">
