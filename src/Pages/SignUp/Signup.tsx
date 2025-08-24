@@ -9,6 +9,7 @@ import {
   loginSuccess,
 } from "../../Store/Auth/AuthSlice";
 import { Link, useNavigate } from "react-router";
+import toast from "react-hot-toast";
 interface Value {
   Name: String;
   Email: String;
@@ -50,10 +51,13 @@ const Signup = () => {
       let res = await apiClient.post<SignupResponse>("/auth/signup", {
         ...values,
       });
+
       dispatch(loginSuccess({ ...res.data }));
+      toast.success("User created successfully");
       navigate("/");
     } catch (error) {
       dispatch(loginError());
+      toast.error("something went wrong");
       console.log(error);
     }
   };
@@ -132,7 +136,7 @@ const Signup = () => {
                 )}
               </div>
               <button
-                type="button"
+                type="submit"
                 className="bg-[#398eb4] rounded place-self-center mt-6 h-10 w-2/4 text-white cursor-pointer"
               >
                 {LoginLoader ? (
@@ -146,7 +150,7 @@ const Signup = () => {
             </div>
           </form>
           <p className="text-sm place-self-center">
-            Already a user Please <Link to="/">Login</Link>
+            Already a user Please <Link to="/login">Login</Link>
           </p>
         </div>
       </div>
