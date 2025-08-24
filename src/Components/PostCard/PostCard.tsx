@@ -85,7 +85,9 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
         />
         <div className="flex flex-col">
           <span className="text-base">{User.Name}</span>
-          <span className="text-sm text-gray-400">{Location}</span>
+          {Location && (
+            <span className="text-sm text-gray-400">{Location}</span>
+          )}
         </div>
       </div>
       <img className="w-120 rounded mt-3" src={Image} alt="" />

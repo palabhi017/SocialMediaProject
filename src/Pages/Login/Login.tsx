@@ -9,6 +9,7 @@ import {
   loginSuccess,
 } from "../../Store/Auth/AuthSlice";
 import { Link, useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 interface Value {
   Email: String;
@@ -51,9 +52,11 @@ const Login = () => {
       });
       console.log(res);
       dispatch(loginSuccess({ ...res.data }));
+      toast.success("Loged in successfully");
       navigate("/");
     } catch (error) {
       dispatch(loginError());
+      toast.error("something went wrong");
       console.log(error);
     }
   };
@@ -127,7 +130,7 @@ const Login = () => {
             </div>
           </form>
           <p className="text-sm place-self-center">
-            Not Ragistered ? Please <Link to="Signup">Signup</Link>
+            Not Ragistered ? Please <Link to="/Signup">Signup</Link>
           </p>
         </div>
       </div>
