@@ -2,9 +2,12 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import ProfileModal from "../ProfileModal/ProfileModal";
+import ModalWrapper from "../ModalWrapper/ModalWrapper";
 
 const Header = () => {
   const [profileOpen, setProfileOpen] = useState<boolean>();
+  const [profileModalOpen, setProfileModalOpen] = useState<boolean>();
   const { user } = useSelector((state: any) => state.AuthReducer);
   const navigate = useNavigate();
   let handleLogoutFun = () => {
@@ -39,7 +42,12 @@ const Header = () => {
         </div>
         {profileOpen && (
           <div className="fixed top-12 z-50 bg-stone-50 w-60 rounded-b-md">
-            <div className="p-2 text-base cursor-pointer">Profile</div>
+            <div
+              className="p-2 text-base cursor-pointer"
+              onClick={() => setProfileModalOpen(true)}
+            >
+              Profile
+            </div>
             <div
               className="p-2 text-base cursor-pointer"
               onClick={() => handleLogoutFun()}
@@ -50,6 +58,11 @@ const Header = () => {
         )}
       </div>
       {/* </ModalWrapper> */}
+      {profileModalOpen && (
+        <ModalWrapper onClose={() => setProfileModalOpen(false)}>
+          <ProfileModal />
+        </ModalWrapper>
+      )}
     </div>
   );
 };

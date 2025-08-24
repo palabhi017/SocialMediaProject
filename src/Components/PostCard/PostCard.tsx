@@ -4,16 +4,13 @@ import {
   PaperAirplaneIcon,
   ShareIcon,
 } from "@heroicons/react/24/outline";
+import UserProfileImage from "../UserProfileImage/UserProfileImage";
 
 const PostCard = ({ Location, Image, User }: any) => {
   return (
     <div className="p-5 w-fit m-5 rounded-md shadow-2xs bg-[#fff]">
       <div className="flex gap-3">
-        <img
-          className="w-12 h-12 rounded-full"
-          src="https://wallpapers.com/images/hd/professional-profile-pictures-1080-x-1080-460wjhrkbwdcp1ig.jpg"
-          alt=""
-        />
+        <UserProfileImage size={12}/>
         <div className="flex flex-col">
           <span className="text-base">{User.Name}</span>
           {Location && (
