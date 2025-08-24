@@ -2,14 +2,13 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import ModalWrapper from "../ModalWrapper/ModalWrapper";
 
 const Header = () => {
   const [profileOpen, setProfileOpen] = useState<boolean>();
   const { user } = useSelector((state: any) => state.AuthReducer);
   const navigate = useNavigate();
   let handleLogoutFun = () => {
-    localStorage.clear();
+    sessionStorage.clear();
     navigate("/login");
   };
   return (

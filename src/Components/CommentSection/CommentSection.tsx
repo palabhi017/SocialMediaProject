@@ -22,8 +22,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comment: comment }) => 
                 />
             </div>
             <div className="grid pl-3">
-                <span className="text-xs">{comment.user.Name}</span>
-                <span className="text-sm">{comment.comment}</span>
+                <span className="text-xs">{comment?.user?.Name}</span>
+                <span className="text-sm">{comment?.comment}</span>
             </div>
         </div>
     )

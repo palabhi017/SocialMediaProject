@@ -7,11 +7,8 @@ import {
 import CommentSection from "../CommentSection/CommentSection"
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  commentLoading
-} from "../../Store/Comment/commentSlice"
-import axios from "axios";
+import { useSelector } from "react-redux";
+// @ts-ignore
 import apiClient from "../../api/client.js";
 
 
@@ -24,14 +21,16 @@ interface CommentPostValue {
 const PostCard = ({ Location, Image, User, _id }: any) => {
   const [showCommentSection, setshowCommentSection] = useState(false)
   const [allComment, setAllComment] = useState<any[]>([])
+  const { user } = useSelector((state: any) => state.AuthReducer);
 
-  console.log(Location, Image, User, "OOOOOOO")
+
+
 
   const formik = useFormik({
     initialValues:
     {
       comment: "",
-      userId: User?._id,
+      userId: user?._id,
       postId: _id
     },
     onSubmit: (values, { resetForm }) => {
@@ -42,6 +41,7 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
 
   const postComment = async (values: CommentPostValue) => {
     try {
+      setshowCommentSection(true)
       let res = await apiClient.post<any>(
         "comment/postComment",
         {
@@ -49,10 +49,10 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
         }
       )
       setAllComment([res.data as any, ...allComment]);
+      console.log(res, "PPPPPPPPPPPP")
 
-      console.log(res, "resresres")
     } catch (err) {
-      console.log(err, "PPPPpppppp")
+      console.log({ "Err": err })
     }
   }
 
@@ -66,7 +66,6 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
 
       await apiClient.get<any>(`/comment/getComment/${postId}`)
         .then((res: any) => {
-          console.log(res,"Ppppppppppp=====")
           setAllComment(res.data)
         }).catch((err: any) => {
           console.log(err)
@@ -85,7 +84,9 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
         />
         <div className="flex flex-col">
           <span className="text-base">{User.Name}</span>
-          <span className="text-sm text-gray-400">{Location}</span>
+          {Location && (
+            <span className="text-sm text-gray-400">{Location}</span>
+          )}
         </div>
       </div>
       <img className="w-120 rounded mt-3" src={Image} alt="" />
@@ -120,7 +121,7 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
       </div>
       {
         showCommentSection ? (
-          <div className="h-50 max-h-50 overflow-y-auto ">
+          <div className="max-h-50 overflow-y-auto ">
             {allComment.map((comment, index) => (
               <CommentSection key={index} comment={comment} />
             ))}
@@ -140,7 +141,11 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
           placeholder="Write a comment..."
           onChange={formik.handleChange}
           value={formik.values.comment}
-
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              formik.handleSubmit(); // Call your sendMessage function
+            }
+          }}
         />
         <PaperAirplaneIcon className="size-5"
           onClick={() => formik.handleSubmit()}

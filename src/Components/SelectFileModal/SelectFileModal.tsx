@@ -47,12 +47,11 @@ const SelectFileModal = ({
         headers: { "Content-Type": "multipart/form-data" },
       });
       dispatch(refetchTrue());
+      setShowPostModal(false);
       toast.success("Post created successfully");
     } catch (error) {
       toast.error("Somthing went wrong!");
       console.log(error);
-    } finally {
-      setShowPostModal(false);
     }
   };
 
