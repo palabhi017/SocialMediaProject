@@ -12,6 +12,7 @@ import {
   commentLoading
 } from "../../Store/Comment/commentSlice"
 import axios from "axios";
+// @ts-ignore
 import apiClient from "../../api/client.js";
 
 
@@ -25,7 +26,6 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
   const [showCommentSection, setshowCommentSection] = useState(false)
   const [allComment, setAllComment] = useState<any[]>([])
 
-  console.log(Location, Image, User, "OOOOOOO")
 
   const formik = useFormik({
     initialValues:
@@ -50,9 +50,8 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
       )
       setAllComment([res.data as any, ...allComment]);
 
-      console.log(res, "resresres")
     } catch (err) {
-      console.log(err, "PPPPpppppp")
+      console.log({ "Err": err })
     }
   }
 
@@ -66,7 +65,6 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
 
       await apiClient.get<any>(`/comment/getComment/${postId}`)
         .then((res: any) => {
-          console.log(res,"Ppppppppppp=====")
           setAllComment(res.data)
         }).catch((err: any) => {
           console.log(err)

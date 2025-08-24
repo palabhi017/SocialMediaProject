@@ -18,7 +18,6 @@ const Homepage = () => {
   let handleGetAllPost = async () => {
     try {
       let res = await apiClient.get<any>("/post/getAllpost");
-      console.log(res.data.allPost);
       dispatch(refetchFalse());
       setAllPostData(res.data.allPost);
     } catch (error) {
@@ -50,7 +49,6 @@ const Homepage = () => {
     }
   }, [isRefetch]);
 
-  console.log(allPostData,"allPostData")
 
   return (
     <div className="h-screen flex flex-col">
