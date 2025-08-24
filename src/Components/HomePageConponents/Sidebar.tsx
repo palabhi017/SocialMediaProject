@@ -9,7 +9,7 @@ import {
 
 const Sidebar = () => {
   return (
-    <div className="w-60  h-dvh">
+    <div className="w-60  h-full">
       <div className="flex flex-col  pl-10 gap-5 mt-5">
         <div className="flex gap-3 text-base items-center">
           <HomeIcon className="size-5" />

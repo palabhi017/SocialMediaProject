@@ -2,8 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const token = localStorage.getItem("token");
 
-const initialState = {
-  user: null,
+const initialState: any = {
+  user: (() => {
+    try {
+      const data = localStorage.getItem("userdata");
+      return data ? JSON.parse(data) : {};
+    } catch {
+      return {};
+    }
+  })(),
   token: token || null,
   LoginLoader: false,
   LoginError: false,
@@ -27,9 +34,10 @@ const LoginSlice = createSlice({
       console.log(action.payload);
       state.LoginLoader = false;
       state.LoginError = false;
-      state.user = action.payload.Name;
+      state.user = action.payload.userData;
       state.token = action.payload.token;
       localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("userdata", JSON.stringify(action.payload.userData));
     },
     loginError: (state) => {
       state.LoginLoader = false;

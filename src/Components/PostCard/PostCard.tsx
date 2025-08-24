@@ -12,6 +12,8 @@ import {
   commentLoading
 } from "../../Store/Comment/commentSlice"
 import axios from "axios";
+import apiClient from "../../api/client.js";
+
 
 interface CommentPostValue {
   comment: String
@@ -19,17 +21,18 @@ interface CommentPostValue {
   postId: String
 }
 
-const PostCard = () => {
+const PostCard = ({ Location, Image, User, _id }: any) => {
   const [showCommentSection, setshowCommentSection] = useState(false)
-  const [allComment, setAllComment] = useState([])
+  const [allComment, setAllComment] = useState<any[]>([])
 
+  console.log(Location, Image, User, "OOOOOOO")
 
   const formik = useFormik({
     initialValues:
     {
       comment: "",
-      userId: "6890c32c2e55fd668c72b33f",
-      postId: "68a34b41afdbe290716f48e2"
+      userId: User?._id,
+      postId: _id
     },
     onSubmit: (values, { resetForm }) => {
       postComment(values)
@@ -39,12 +42,14 @@ const PostCard = () => {
 
   const postComment = async (values: CommentPostValue) => {
     try {
-      let res = await axios.post(
-        "http://localhost:5000/api/comment/postComment",
+      let res = await apiClient.post<any>(
+        "comment/postComment",
         {
           ...values
         }
       )
+      setAllComment([res.data as any, ...allComment]);
+
       console.log(res, "resresres")
     } catch (err) {
       console.log(err, "PPPPpppppp")
@@ -57,12 +62,13 @@ const PostCard = () => {
 
   const getAllComments = async () => {
     if (showCommentSection) {
-      await axios.get(
-        "http://localhost:5000/api/comment/getComment")
-        .then((res) => {
-          console.log(res, "Ppppppppppppp")
+      const postId = _id;
+
+      await apiClient.get<any>(`/comment/getComment/${postId}`)
+        .then((res: any) => {
+          console.log(res,"Ppppppppppp=====")
           setAllComment(res.data)
-        }).catch((err) => {
+        }).catch((err: any) => {
           console.log(err)
         })
     }
@@ -70,7 +76,7 @@ const PostCard = () => {
 
 
   return (
-    <div className="p-5 w-fit m-5 rounded-xl shadow-md bg-[#fff]">
+    <div className="p-5 w-fit m-5 rounded-md shadow-2xs bg-[#fff]">
       <div className="flex gap-3">
         <img
           className="w-12 h-12 rounded-full"
@@ -78,15 +84,11 @@ const PostCard = () => {
           alt=""
         />
         <div className="flex flex-col">
-          <span className="text-base">Abhishek</span>
-          <span className="text-sm text-gray-400">Badnawar, MP</span>
+          <span className="text-base">{User.Name}</span>
+          <span className="text-sm text-gray-400">{Location}</span>
         </div>
       </div>
-      <img
-        className="w-120 rounded mt-3"
-        src="https://1.bp.blogspot.com/-KANgNmAXGGA/X9IHjMTivVI/AAAAAAAAAVA/VW6WFYFSPDM6ehwZarHB8Q5Y14r7_tp9wCLcBGAsYHQ/s1920/20201210_165103.jpg"
-        alt=""
-      />
+      <img className="w-120 rounded mt-3" src={Image} alt="" />
       <div className="flex justify-between p-2 border-b border-gray-200">
         <img
           className="w-6 h-6 rounded-full"

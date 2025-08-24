@@ -1,5 +1,6 @@
 type Comment = {
     id: number;
+    user:any;
     comment: string;
     userId: string;
     postId: string;
@@ -21,7 +22,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comment: comment }) => 
                 />
             </div>
             <div className="grid pl-3">
-                <span className="text-xs">Nisha Sharma</span>
+                <span className="text-xs">{comment.user.Name}</span>
                 <span className="text-sm">{comment.comment}</span>
             </div>
         </div>
