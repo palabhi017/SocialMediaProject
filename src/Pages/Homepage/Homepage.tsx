@@ -32,6 +32,7 @@ const Homepage = () => {
       setAllPostData((prev: any) => [data, ...prev]);
     });
 
+
     return () => {
       socket.off("new_post", (data: any) => {
         setAllPostData((prev: any) => [data, ...prev]);
@@ -58,7 +59,7 @@ const Homepage = () => {
         <div className="flex-1 bg-gray-100 overflow-y-auto scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-blue-200">
           <PostMemeCard />
           {allPostData &&
-            allPostData?.length>0 &&
+            allPostData?.length > 0 &&
             allPostData.map((e: any) => <PostCard key={e._id} {...e} />)}
         </div>
         {/* <ChatsSection /> */}

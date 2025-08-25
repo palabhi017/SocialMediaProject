@@ -10,7 +10,8 @@ import { useFormik } from "formik";
 import { useSelector } from "react-redux";
 // @ts-ignore
 import apiClient from "../../api/client.js";
-
+// @ts-ignore
+import { socket } from "../../api/socket.js";
 
 interface CommentPostValue {
   comment: String
@@ -18,9 +19,11 @@ interface CommentPostValue {
   postId: String
 }
 
-const PostCard = ({ Location, Image, User, _id }: any) => {
+const PostCard = ({ Location, Image, commentCount, _id }: any) => {
   const [showCommentSection, setshowCommentSection] = useState(false)
   const [allComment, setAllComment] = useState<any[]>([])
+  const [localCommentCount, setLocalCommentCount] = useState(commentCount || 0);
+
   const { user } = useSelector((state: any) => state.AuthReducer);
 
 
@@ -30,8 +33,8 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
     initialValues:
     {
       comment: "",
-      userId: user?._id,
-      postId: _id
+      userId: "",
+      postId: "",
     },
     onSubmit: (values, { resetForm }) => {
       postComment(values)
@@ -45,16 +48,36 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
       let res = await apiClient.post<any>(
         "comment/postComment",
         {
-          ...values
+          ...values,
+          userId: user?._id,
+          postId: _id
         }
       )
-      setAllComment([res.data as any, ...allComment]);
-      console.log(res, "PPPPPPPPPPPP")
 
     } catch (err) {
       console.log({ "Err": err })
     }
   }
+
+  useEffect(() => {
+    socket.on("newComment", (data: any) => {
+      if (data.postId === _id) { // Only update this post
+        setAllComment((prevComments) => [data, ...prevComments]);
+      }
+    });
+
+    socket.on("commentCount", (data: any) => {
+      if (data === _id) { // Only update this post
+        setLocalCommentCount((prev: number) => prev + 1);
+      }
+    });
+
+    return () => {
+      socket.off("newComment");
+      socket.off("commentCount");
+    };
+  }, [_id]);
+
 
   useEffect(() => {
     getAllComments()
@@ -97,7 +120,7 @@ const PostCard = ({ Location, Image, User, _id }: any) => {
           alt=""
         />
         <div className="flex gap-3 items-center">
-          <span className="text-sm"> 13 Comments</span>
+          <span className="text-sm"> {localCommentCount} Comments</span>
           <span className="text-sm">345 Likes</span>
         </div>
       </div>
