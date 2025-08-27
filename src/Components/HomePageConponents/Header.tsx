@@ -2,13 +2,17 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import ProfileModal from "../ProfileModal/ProfileModal";
+import ModalWrapper from "../ModalWrapper/ModalWrapper";
+import UserProfileImage from "../UserProfileImage/UserProfileImage";
 
 const Header = () => {
   const [profileOpen, setProfileOpen] = useState<boolean>();
+  const [profileModalOpen, setProfileModalOpen] = useState<boolean>();
   const { user } = useSelector((state: any) => state.AuthReducer);
   const navigate = useNavigate();
   let handleLogoutFun = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     navigate("/login");
   };
   return (
@@ -31,15 +35,16 @@ const Header = () => {
           onClick={() => setProfileOpen(!profileOpen)}
         >
           <div className="text-md ">{user?.Name}</div>
-          <img
-            className="w-9 h-9 rounded-full"
-            src="https://wallpapers.com/images/hd/professional-profile-pictures-1080-x-1080-460wjhrkbwdcp1ig.jpg"
-            alt=""
-          />
+          <UserProfileImage size={"35px"} fontSize={"sm"} />
         </div>
         {profileOpen && (
           <div className="fixed top-12 z-50 bg-stone-50 w-60 rounded-b-md">
-            <div className="p-2 text-base cursor-pointer">Profile</div>
+            <div
+              className="p-2 text-base cursor-pointer"
+              onClick={() => setProfileModalOpen(true)}
+            >
+              Profile
+            </div>
             <div
               className="p-2 text-base cursor-pointer"
               onClick={() => handleLogoutFun()}
@@ -50,6 +55,11 @@ const Header = () => {
         )}
       </div>
       {/* </ModalWrapper> */}
+      {profileModalOpen && (
+        <ModalWrapper onClose={() => setProfileModalOpen(false)}>
+          <ProfileModal CloseModal={() => setProfileModalOpen(false)} />
+        </ModalWrapper>
+      )}
     </div>
   );
 };

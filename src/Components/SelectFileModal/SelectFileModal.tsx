@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader/Loader";
 import toast from "react-hot-toast";
 import { refetchTrue } from "../../Store/Refetch/RefetchSlice";
+import UserProfileImage from "../UserProfileImage/UserProfileImage";
 
 interface PostResponse {
   data?: string;
@@ -87,11 +88,7 @@ const SelectFileModal = ({
             {isExtendModal && (
               <div className="flex flex-col w-[350px]  items-center p-5">
                 <div className="flex w-full h-15  items-center gap-3">
-                  <img
-                    className="w-6 h-6 rounded-full"
-                    src="https://wallpapers.com/images/hd/professional-profile-pictures-1080-x-1080-460wjhrkbwdcp1ig.jpg"
-                    alt=""
-                  />
+                  <UserProfileImage size={"25px"} fontSize={"sm"} />
                   <span className="text-stone-50 text-base font-normal">
                     {user.Name}
                   </span>

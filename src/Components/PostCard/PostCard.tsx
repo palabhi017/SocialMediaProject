@@ -4,7 +4,8 @@ import {
   PaperAirplaneIcon,
   ShareIcon,
 } from "@heroicons/react/24/outline";
-import CommentSection from "../CommentSection/CommentSection"
+import UserProfileImage from "../UserProfileImage/UserProfileImage";
+import CommentSection from "../CommentSection/CommentSection";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
@@ -14,60 +15,54 @@ import apiClient from "../../api/client.js";
 import { socket } from "../../api/socket.js";
 
 interface CommentPostValue {
-  comment: String
-  userId: String
-  postId: String
+  comment: String;
+  userId: String;
+  postId: String;
 }
 
 const PostCard = ({ Location, Image, commentCount, _id }: any) => {
-  const [showCommentSection, setshowCommentSection] = useState(false)
-  const [allComment, setAllComment] = useState<any[]>([])
+  const [showCommentSection, setshowCommentSection] = useState(false);
+  const [allComment, setAllComment] = useState<any[]>([]);
   const [localCommentCount, setLocalCommentCount] = useState(commentCount || 0);
 
   const { user } = useSelector((state: any) => state.AuthReducer);
 
-
-
-
   const formik = useFormik({
-    initialValues:
-    {
+    initialValues: {
       comment: "",
       userId: "",
       postId: "",
     },
     onSubmit: (values, { resetForm }) => {
-      postComment(values)
+      postComment(values);
       resetForm();
-    }
-  })
+    },
+  });
 
   const postComment = async (values: CommentPostValue) => {
     try {
-      setshowCommentSection(true)
-      let res = await apiClient.post<any>(
-        "comment/postComment",
-        {
-          ...values,
-          userId: user?._id,
-          postId: _id
-        }
-      )
-
+      setshowCommentSection(true);
+      let res = await apiClient.post<any>("comment/postComment", {
+        ...values,
+        userId: user?._id,
+        postId: _id,
+      });
     } catch (err) {
-      console.log({ "Err": err })
+      console.log({ Err: err });
     }
-  }
+  };
 
   useEffect(() => {
     socket.on("newComment", (data: any) => {
-      if (data.postId === _id) { // Only update this post
+      if (data.postId === _id) {
+        // Only update this post
         setAllComment((prevComments) => [data, ...prevComments]);
       }
     });
 
     socket.on("commentCount", (data: any) => {
-      if (data === _id) { // Only update this post
+      if (data === _id) {
+        // Only update this post
         setLocalCommentCount((prev: number) => prev + 1);
       }
     });
@@ -78,33 +73,32 @@ const PostCard = ({ Location, Image, commentCount, _id }: any) => {
     };
   }, [_id]);
 
-
   useEffect(() => {
-    getAllComments()
-  }, [showCommentSection])
+    getAllComments();
+  }, [showCommentSection]);
 
   const getAllComments = async () => {
     if (showCommentSection) {
       const postId = _id;
 
-      await apiClient.get<any>(`/comment/getComment/${postId}`)
+      await apiClient
+        .get<any>(`/comment/getComment/${postId}`)
         .then((res: any) => {
-          setAllComment(res.data)
-        }).catch((err: any) => {
-          console.log(err)
+          setAllComment(res.data);
         })
+        .catch((err: any) => {
+          console.log(err);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
     }
-  }
-
+  };
 
   return (
     <div className="p-5 w-fit m-5 rounded-md shadow-2xs bg-[#fff]">
       <div className="flex gap-3">
-        <img
-          className="w-12 h-12 rounded-full"
-          src="https://wallpapers.com/images/hd/professional-profile-pictures-1080-x-1080-460wjhrkbwdcp1ig.jpg"
-          alt=""
-        />
+        <UserProfileImage size={"45px"} fontSize={"base"} />
         <div className="flex flex-col">
           <span className="text-base">{user.Name}</span>
           {Location && (
@@ -114,11 +108,7 @@ const PostCard = ({ Location, Image, commentCount, _id }: any) => {
       </div>
       <img className="w-120 rounded mt-3" src={Image} alt="" />
       <div className="flex justify-between p-2 border-b border-gray-200">
-        <img
-          className="w-6 h-6 rounded-full"
-          src="https://wallpapers.com/images/hd/professional-profile-pictures-1080-x-1080-460wjhrkbwdcp1ig.jpg"
-          alt=""
-        />
+        <UserProfileImage size={"22px"} fontSize={"xs"} />
         <div className="flex gap-3 items-center">
           <span className="text-sm"> {localCommentCount} Comments</span>
           <span className="text-sm">345 Likes</span>
@@ -129,9 +119,10 @@ const PostCard = ({ Location, Image, commentCount, _id }: any) => {
           <HeartIcon className="size-4" />
           Like
         </div>
-        <div className="flex items-center gap-1 text-sm cursor-pointer"
+        <div
+          className="flex items-center gap-1 text-sm cursor-pointer"
           onClick={() => {
-            setshowCommentSection(!showCommentSection)
+            setshowCommentSection(!showCommentSection);
           }}
         >
           <ChatBubbleBottomCenterIcon className="size-4" />
@@ -142,21 +133,15 @@ const PostCard = ({ Location, Image, commentCount, _id }: any) => {
           Share
         </div>
       </div>
-      {
-        showCommentSection ? (
-          <div className="max-h-50 overflow-y-auto ">
-            {allComment.map((comment, index) => (
-              <CommentSection key={index} comment={comment} />
-            ))}
-          </div>
-        ) : null
-      }
+      {showCommentSection ? (
+        <div className="max-h-50 overflow-y-auto ">
+          {allComment.map((comment, index) => (
+            <CommentSection key={index} comment={comment} />
+          ))}
+        </div>
+      ) : null}
       <div className="flex items-center justify-between p-2 border-b gap-5 border-gray-200">
-        <img
-          className="w-7 h-7 rounded-full"
-          src="https://wallpapers.com/images/hd/professional-profile-pictures-1080-x-1080-460wjhrkbwdcp1ig.jpg"
-          alt=""
-        />
+        <UserProfileImage size={"25px"} fontSize={"xs"} />
         <input
           name="comment"
           type="text"
@@ -170,7 +155,8 @@ const PostCard = ({ Location, Image, commentCount, _id }: any) => {
             }
           }}
         />
-        <PaperAirplaneIcon className="size-5"
+        <PaperAirplaneIcon
+          className="size-5"
           onClick={() => formik.handleSubmit()}
         />
       </div>
