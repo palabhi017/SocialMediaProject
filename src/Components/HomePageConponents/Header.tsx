@@ -35,7 +35,7 @@ const Header = () => {
           onClick={() => setProfileOpen(!profileOpen)}
         >
           <div className="text-md ">{user?.Name}</div>
-          <UserProfileImage size={9} fontSize={"sm"} />
+          <UserProfileImage size={"35px"} fontSize={"sm"} />
         </div>
         {profileOpen && (
           <div className="fixed top-12 z-50 bg-stone-50 w-60 rounded-b-md">

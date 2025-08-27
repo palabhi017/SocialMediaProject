@@ -50,7 +50,6 @@ const Login = () => {
       let res = await apiClient.post<SignupResponse>("/auth/login", {
         ...values,
       });
-      console.log(res);
       dispatch(loginSuccess({ ...res.data }));
       toast.success("Loged in successfully");
       navigate("/");

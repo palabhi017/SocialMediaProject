@@ -18,7 +18,6 @@ const Homepage = () => {
   let handleGetAllPost = async () => {
     try {
       let res = await apiClient.get<any>("/post/getAllpost");
-      console.log(res.data.allPost);
       dispatch(refetchFalse());
       setAllPostData(res.data.allPost);
     } catch (error) {
@@ -50,8 +49,6 @@ const Homepage = () => {
     }
   }, [isRefetch]);
 
-  console.log(allPostData, "allPostData");
-
   return (
     <div className="h-screen flex flex-col">
       <Header />
@@ -60,7 +57,7 @@ const Homepage = () => {
         <div className="flex-1 bg-gray-100 overflow-y-auto scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-blue-200">
           <PostMemeCard />
           {allPostData &&
-            allPostData?.length &&
+            allPostData?.length > 0 &&
             allPostData.map((e: any) => <PostCard key={e._id} {...e} />)}
         </div>
         <ChatsSection />

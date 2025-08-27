@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 const UserProfileImage = ({
   size,
   fontSize,
+  Image,
 }: {
   size: string | number;
   fontSize: string;
+  Image?: string | null;
 }) => {
   const { user } = useSelector((state: any) => state.AuthReducer);
   function getInitials(name: string) {
@@ -20,21 +22,23 @@ const UserProfileImage = ({
     return (words[0][0] + words[1][0]).toUpperCase();
   }
   return (
-    <div>
-      {user.Image ? (
+    <>
+      {user.ProfileImg || Image ? (
         <img
-          className={`w-${size} h-${size} rounded-full`}
-          src={user?.Image}
+          style={{ width: size, height: size }}
+          className={`rounded-full`}
+          src={Image || user?.ProfileImg}
           alt=""
         />
       ) : (
         <div
-          className={`w-${size} h-${size} rounded-full text-${fontSize} bg-blue-200 flex justify-center items-center`}
+          style={{ width: size, height: size }}
+          className={`rounded-full text-${fontSize} bg-blue-200 flex justify-center items-center`}
         >
           {getInitials(user.Name)}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

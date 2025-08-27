@@ -88,7 +88,7 @@ const SelectFileModal = ({
             {isExtendModal && (
               <div className="flex flex-col w-[350px]  items-center p-5">
                 <div className="flex w-full h-15  items-center gap-3">
-                  <UserProfileImage size={6} fontSize={"sm"} />
+                  <UserProfileImage size={"25px"} fontSize={"sm"} />
                   <span className="text-stone-50 text-base font-normal">
                     {user.Name}
                   </span>

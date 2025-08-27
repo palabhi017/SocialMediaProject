@@ -8,9 +8,9 @@ const PostMemeCard = () => {
   const [showPostModal, setShowPostModal] = useState<boolean>(false);
 
   return (
-    <div className="p-5 w-130 m-5 rounded-md shadow-2xs bg-[#fff]">
+    <div className="p-3 w-130 m-5 rounded-md shadow-2xs bg-[#fff]">
       <div className="flex gap-3 justify-between items-center">
-        <UserProfileImage size={10} fontSize={"base"} />
+        <UserProfileImage size={"40px"} fontSize={"base"} />
         <div className="flex  items-center">
           <Button Name={"Create Post"} action={() => setShowPostModal(true)} />
         </div>

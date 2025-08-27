@@ -12,12 +12,12 @@ interface CommentSectionProps {
   comment: TComment;
 }
 
-const CommentSection = ({ comment }: any) => {
+const CommentSection = ({ comment }: CommentSectionProps) => {
   console.log(comment, "commentcomment");
   return (
     <div className="pb-2 pt-1 flex items-center justify-items-center">
       <div>
-        <UserProfileImage size={6} fontSize={"sm"} />
+        <UserProfileImage size={"20px"} fontSize={"xs"} />
       </div>
       <div className="grid pl-3">
         <span className="text-xs">{comment?.user?.Name}</span>
