@@ -12,7 +12,7 @@ const Header = () => {
   const { user } = useSelector((state: any) => state.AuthReducer);
   const navigate = useNavigate();
   let handleLogoutFun = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     navigate("/login");
   };
   return (
@@ -57,7 +57,7 @@ const Header = () => {
       {/* </ModalWrapper> */}
       {profileModalOpen && (
         <ModalWrapper onClose={() => setProfileModalOpen(false)}>
-          <ProfileModal />
+          <ProfileModal CloseModal={() => setProfileModalOpen(false)} />
         </ModalWrapper>
       )}
     </div>

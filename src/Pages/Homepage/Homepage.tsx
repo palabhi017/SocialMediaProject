@@ -34,6 +34,7 @@ const Homepage = () => {
     };
     socket.on("new_post", handleNewPost);
 
+
     return () => {
       socket.off("new_post", handleNewPost);
     };

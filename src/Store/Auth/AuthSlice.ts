@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const token = sessionStorage.getItem("token");
+const token = localStorage.getItem("token");
 
 const initialState: any = {
   user: (() => {
     try {
-      const data = sessionStorage.getItem("userdata");
+      const data = localStorage.getItem("userdata");
       return data ? JSON.parse(data) : {};
     } catch {
       return {};
@@ -35,11 +35,11 @@ const LoginSlice = createSlice({
       state.LoginError = false;
       state.user = action.payload.userData;
       state.token = action.payload.token;
-      sessionStorage.setItem("token", action.payload.token);
-      sessionStorage.setItem(
-        "userdata",
-        JSON.stringify(action.payload.userData)
-      );
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("userdata", JSON.stringify(action.payload.userData));
+    },
+    profileUpdate: (state, action) => {
+      state.user = action.payload.data;
     },
     loginError: (state) => {
       state.LoginLoader = false;
@@ -48,11 +48,11 @@ const LoginSlice = createSlice({
     logout: (state) => {
       state.token = null;
       state.user = null;
-      sessionStorage.removeItem("token");
+      localStorage.removeItem("token");
     },
   },
 });
 
-export const { loginLoading, loginSuccess, loginError, logout } =
+export const { loginLoading, loginSuccess, loginError, logout, profileUpdate } =
   LoginSlice.actions;
 export default LoginSlice.reducer;
